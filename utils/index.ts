@@ -705,7 +705,7 @@ export async function packHTMLAssets(html: string, title: string, zip?: JSZip) {
                     <span class="weui-flex__item audio_card_desc js_duration js_duration2">
                         <span style="position: relative; display: inline-block;">
                             <span style="opacity: 0; display: inline-block;" aria-hidden="true">00:00</span>
-                            <span style="position: absolute; left: 0; top: 0;" class="start"></span>
+                            <span style="position: absolute; left: 0; top: 0;" class="start"></span
                         </span>
                         <span style="position: relative; display: inline-block;">/</span>
                         <span style="position: relative; display: inline-block;">

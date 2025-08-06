@@ -5,6 +5,7 @@ export interface LoginAccount {
     avatar: string
     fakeid: string
     expires: string
+    cookies?: string[]  // 添加 cookies 字段
     err?: string
 }
 

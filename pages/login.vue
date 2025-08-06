@@ -110,6 +110,7 @@
 
 <script setup lang="ts">
 import type {LoginAccount, ScanLoginResult, StartLoginResult} from "~/types/types";
+import axios from '@/request';
 
 
 const qrcodeSrc = ref('')
@@ -249,6 +250,16 @@ async function bizLogin() {
     alert(result.err)
   } else if (result.token) {
     console.log('登录成功')
+    try {
+      const { data } = await axios.post('/api/wechat/cookie/info', {
+        cookie: result.cookies?.toString()
+      })
+      if (data.code !== 0) {
+        console.error('Cookie 同步失败:', data.message)
+      }
+    } catch (error) {
+      console.error('发送 cookie 到后端失败:', error)
+    }
     loginAccount.value = result
 
     if (!activeAccount.value) {
