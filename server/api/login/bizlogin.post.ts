@@ -32,9 +32,10 @@ export default defineEventHandler(async (event) => {
 
     const _body = await response.json()
     const _token = new URL(`http://localhost${_body.redirect_url}`).searchParams.get('token')
-    const _cookie: string[] = []
-    Object.keys(parsedCookies).forEach(key => {
-        _cookie.push(key + '=' + parsedCookies[key].value)
+    // 保存所有必要的 cookie
+    const _cookie: string[] = cookies.map(cookie => {
+        // 只取第一部分，即 name=value
+        return cookie.split(';')[0].trim()
     })
     const {nick_name, head_img} = await $fetch(`/api/login/info?token=${_token}`, {
         headers: {
@@ -95,10 +96,18 @@ export default defineEventHandler(async (event) => {
         fakeid: user.fakeid,
         token: _token,
         expires: slave_user_cookie.expires,
+        cookies: _cookie // 添加 cookies 到响应体中
     })
 
+    // 创建新的响应头
     const headers = new Headers(response.headers)
     headers.set('Content-Length', new TextEncoder().encode(newBody).length.toString())
+
+    // 将所有 cookies 添加到响应头中
+    cookies.forEach(cookie => {
+        headers.append('Set-Cookie', cookie)
+    })
+
     return new Response(newBody, {headers: headers})
 })
 
